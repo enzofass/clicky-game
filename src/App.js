@@ -1,5 +1,7 @@
 import React, { Component } from "react";
+import Grid from "react-css-grid";
 import "./App.css";
+import Header from "./components/Header";
 import Wrapper from "./components/Wrapper";
 import GameCard from "./components/GameCard";
 import albums from "./albumsSantana.json";
@@ -7,11 +9,15 @@ import albums from "./albumsSantana.json";
 class App extends Component {
   state = {
     albums,
-    isClicked: false
+    clickedAlbums: [],
+    highScore: 0,
+    currScore: 0
   };
 
-  handleClick = () => {
-    console.log("Albums", albums);
+  handleClick = e => {
+    console.log("Albums", e.target.id);
+    const id = e.target.id;
+    this.evaluateClick(id);
     this.setState({ isClicked: true });
     let i = 0,
       j = 0,
@@ -26,20 +32,55 @@ class App extends Component {
     return this.setState({ albums });
   };
 
+  evaluateClick = id => {
+    const currentArr = this.state.clickedAlbums;
+    console.log("evaluateClick", currentArr);
+    if (currentArr.includes(id)) {
+      console.log("duplicate id in array");
+      this.getGameResults(this.state.currScore, this.state.highScore);
+    } else {
+      currentArr.push(id);
+      this.setState({
+        clickedAlbums: currentArr,
+        currScore: currentArr.length
+      });
+      console.log("clickedAlbums", this.state.clickedAlbums.length);
+    }
+  };
+
+  getGameResults = (score, topScore) => {
+    const clearArr = [];
+    if (score > topScore) {
+      this.setState({
+        highScore: score
+      });
+      console.log(this.state.clickedAlbums);
+    }
+    this.setState({ clickedAlbums: clearArr, currScore: 0 });
+  };
+
   render() {
     return (
       <div className='App'>
-        <h1>Clicky Game</h1>
+        <Header
+          currScore={this.state.currScore}
+          highScore={this.state.highScore}
+        />
         <Wrapper>
-          {this.state.albums.map(album => (
-            <GameCard
-              name={album.name}
-              src={album.image}
-              key={album.id}
-              handleClick={this.handleClick}
-              isClicked={this.state.isClicked}
-            />
-          ))}
+          <Grid width={320} gap={24}>
+            {this.state.albums.map(album => (
+              <GameCard
+                name={album.name}
+                src={album.image}
+                key={album.id}
+                id={album.id}
+                handleClick={this.handleClick}
+                evaluateClick={() => {
+                  this.evaluateClick(album.id);
+                }}
+              />
+            ))}
+          </Grid>
         </Wrapper>
       </div>
     );

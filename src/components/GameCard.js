@@ -2,7 +2,6 @@ import React from "react";
 import "./style.css";
 
 function GameCard(props) {
-  console.log("GameCard", props);
   return (
     <div>
       <img
@@ -11,6 +10,7 @@ function GameCard(props) {
         style={imgStyles}
         className='grow:hover grow shadow'
         onClick={props.handleClick}
+        id={props.id}
       />
     </div>
   );
@@ -18,9 +18,7 @@ function GameCard(props) {
 
 const imgStyles = {
   height: "200px",
-  width: "200px",
-  margin: "20px",
-  float: "left"
+  width: "200px"
 };
 
 export default GameCard;
