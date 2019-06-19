@@ -49,14 +49,13 @@ class App extends Component {
   };
 
   getGameResults = (score, topScore) => {
-    const clearArr = [];
     if (score > topScore) {
       this.setState({
         highScore: score
       });
       console.log(this.state.clickedAlbums);
     }
-    this.setState({ clickedAlbums: clearArr, currScore: 0 });
+    this.setState({ clickedAlbums: [], currScore: 0 });
   };
 
   render() {
