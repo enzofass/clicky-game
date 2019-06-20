@@ -4,10 +4,12 @@
   "private": true,
   "homepage": "https://enzofass.github.io/clicky-game/",
   "dependencies": {
+    "flexboxgrid": "^6.3.1",
     "gh-pages": "^2.0.1",
     "react": "^16.8.6",
     "react-css-grid": "^2.0.0-0",
     "react-dom": "^16.8.6",
+    "react-fontawesome": "^1.6.1",
     "react-scripts": "3.0.1"
   },
   "scripts": {

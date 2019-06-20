@@ -4,6 +4,7 @@ import "./App.css";
 import Header from "./components/Header";
 import Wrapper from "./components/Wrapper";
 import GameCard from "./components/GameCard";
+import Footer from "./components/Footer";
 import albums from "./albumsSantana.json";
 
 class App extends Component {
@@ -11,14 +12,17 @@ class App extends Component {
     albums,
     clickedAlbums: [],
     highScore: 0,
-    currScore: 0
+    currScore: 0,
+    guessedRight: false,
+    guessedWrong: false
   };
 
   handleClick = e => {
-    console.log("Albums", e.target.id);
     const id = e.target.id;
     this.evaluateClick(id);
-    this.setState({ isClicked: true });
+  };
+
+  shuffleFunc = () => {
     let i = 0,
       j = 0,
       temp = null;
@@ -29,7 +33,7 @@ class App extends Component {
       albums[i] = albums[j];
       albums[j] = temp;
     }
-    return this.setState({ albums });
+    return this.setState({ albums, guessedWrong: false });
   };
 
   evaluateClick = id => {
@@ -41,9 +45,14 @@ class App extends Component {
     } else {
       currentArr.push(id);
       this.setState({
+        guessedRight: true,
         clickedAlbums: currentArr,
         currScore: currentArr.length
       });
+      setTimeout(() => {
+        this.setState({ guessedRight: false });
+      }, 2000);
+      this.shuffleFunc();
       console.log("clickedAlbums", this.state.clickedAlbums.length);
     }
   };
@@ -55,7 +64,7 @@ class App extends Component {
       });
       console.log(this.state.clickedAlbums);
     }
-    this.setState({ clickedAlbums: [], currScore: 0 });
+    this.setState({ guessedWrong: true, clickedAlbums: [], currScore: 0 });
   };
 
   render() {
@@ -64,9 +73,11 @@ class App extends Component {
         <Header
           currScore={this.state.currScore}
           highScore={this.state.highScore}
+          guessedRight={this.state.guessedRight}
+          guessedWrong={this.state.guessedWrong}
         />
         <Wrapper>
-          <Grid width={320} gap={24}>
+          <Grid width={280} gap={10}>
             {this.state.albums.map(album => (
               <GameCard
                 name={album.name}
@@ -81,6 +92,7 @@ class App extends Component {
             ))}
           </Grid>
         </Wrapper>
+        <Footer />
       </div>
     );
   }
