@@ -42,17 +42,16 @@ body {
   grid-template-columns: 25% 50% 25%;
 }
 
-
 .score-right {
   grid-area: 1 / 1;
-  display: inline-block;
   text-align: center;
+  margin: auto;
 }
 
 .score-wrong {
   grid-area: 1 / 3;
-  display: inline-block;
   text-align: center;
+  margin: auto;
 }
 
 .score-col {

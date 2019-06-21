@@ -4,7 +4,9 @@ import "./style.css";
 function Jumbotron(props) {
   return (
     <div className='main-footer'>
-      <div />
+      <div>
+        
+      </div>
     </div>
   );
 }

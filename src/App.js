@@ -51,7 +51,7 @@ class App extends Component {
       });
       setTimeout(() => {
         this.setState({ guessedRight: false });
-      }, 2000);
+      }, 1500);
       this.shuffleFunc();
       console.log("clickedAlbums", this.state.clickedAlbums.length);
     }
