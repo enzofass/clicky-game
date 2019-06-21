@@ -37,11 +37,12 @@ class App extends Component {
   };
 
   evaluateClick = id => {
-    const currentArr = this.state.clickedAlbums;
+    const { currScore, highScore, clickedAlbums } = this.state;
+    const currentArr = clickedAlbums;
     console.log("evaluateClick", currentArr);
     if (currentArr.includes(id)) {
       console.log("duplicate id in array");
-      this.getGameResults(this.state.currScore, this.state.highScore);
+      this.getGameResults(currScore, highScore);
     } else {
       currentArr.push(id);
       this.setState({
@@ -53,17 +54,20 @@ class App extends Component {
         this.setState({ guessedRight: false });
       }, 1500);
       this.shuffleFunc();
-      console.log("clickedAlbums", this.state.clickedAlbums.length);
+      console.log("clickedAlbums", clickedAlbums.length);
     }
   };
 
   getGameResults = (score, topScore) => {
+    const { highScore, clickedAlbums } = this.state;
     if (score > topScore) {
       this.setState({
         highScore: score
       });
-      console.log(this.state.clickedAlbums);
+      localStorage.setItem("High Score", highScore);
+      console.log(clickedAlbums);
     }
+
     this.setState({ guessedWrong: true, clickedAlbums: [], currScore: 0 });
   };
 
@@ -72,7 +76,7 @@ class App extends Component {
       <div className='App'>
         <Header
           currScore={this.state.currScore}
-          highScore={this.state.highScore}
+          highScore={localStorage.getItem("High Score")}
           guessedRight={this.state.guessedRight}
           guessedWrong={this.state.guessedWrong}
         />
