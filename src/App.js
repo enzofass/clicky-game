@@ -11,7 +11,7 @@ class App extends Component {
   state = {
     albums,
     clickedAlbums: [],
-    highScore: 0,
+    highScore: localStorage.getItem("highScore") || 0,
     currScore: 0,
     guessedRight: false,
     guessedWrong: false
@@ -37,34 +37,38 @@ class App extends Component {
   };
 
   evaluateClick = id => {
-    const currentArr = this.state.clickedAlbums;
+    const { clickedAlbums } = this.state;
+    const currentArr = clickedAlbums;
     console.log("evaluateClick", currentArr);
     if (currentArr.includes(id)) {
       console.log("duplicate id in array");
-      this.getGameResults(this.state.currScore, this.state.highScore);
+      this.setState({ guessedWrong: true, clickedAlbums: [], currScore: 0 });
     } else {
       currentArr.push(id);
-      this.setState({
-        guessedRight: true,
-        clickedAlbums: currentArr,
-        currScore: currentArr.length
-      });
+      this.setState(
+        {
+          guessedRight: true,
+          clickedAlbums: currentArr,
+          currScore: currentArr.length
+        },
+        this.getGameResults
+      );
       setTimeout(() => {
         this.setState({ guessedRight: false });
       }, 1500);
       this.shuffleFunc();
-      console.log("clickedAlbums", this.state.clickedAlbums.length);
+      console.log("clickedAlbums", clickedAlbums.length);
     }
   };
 
-  getGameResults = (score, topScore) => {
-    if (score > topScore) {
+  getGameResults = () => {
+    const { highScore, currScore } = this.state;
+    if (currScore > highScore) {
       this.setState({
-        highScore: score
+        highScore: currScore
       });
-      console.log(this.state.clickedAlbums);
+      localStorage.setItem("highScore", currScore);
     }
-    this.setState({ guessedWrong: true, clickedAlbums: [], currScore: 0 });
   };
 
   render() {
