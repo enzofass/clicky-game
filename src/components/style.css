@@ -18,7 +18,7 @@ body {
 }
 
 .main-footer {
-  height: 80px;
+  
   background-image: url("./images/resized_6.jpg");
   background-repeat: no-repeat; /* Do not repeat the image */
   background-size: cover; /* Resize the background image to cover the entire container */
