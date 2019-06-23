@@ -11,7 +11,7 @@ class App extends Component {
   state = {
     albums,
     clickedAlbums: [],
-    highScore: 0,
+    highScore: localStorage.getItem("highScore") || 0,
     currScore: 0,
     guessedRight: false,
     guessedWrong: false
@@ -37,19 +37,22 @@ class App extends Component {
   };
 
   evaluateClick = id => {
-    const { currScore, highScore, clickedAlbums } = this.state;
+    const { clickedAlbums } = this.state;
     const currentArr = clickedAlbums;
     console.log("evaluateClick", currentArr);
     if (currentArr.includes(id)) {
       console.log("duplicate id in array");
-      this.getGameResults(currScore, highScore);
+      this.setState({ guessedWrong: true, clickedAlbums: [], currScore: 0 });
     } else {
       currentArr.push(id);
-      this.setState({
-        guessedRight: true,
-        clickedAlbums: currentArr,
-        currScore: currentArr.length
-      });
+      this.setState(
+        {
+          guessedRight: true,
+          clickedAlbums: currentArr,
+          currScore: currentArr.length
+        },
+        this.getGameResults
+      );
       setTimeout(() => {
         this.setState({ guessedRight: false });
       }, 1500);
@@ -58,17 +61,14 @@ class App extends Component {
     }
   };
 
-  getGameResults = (score, topScore) => {
-    const { highScore, clickedAlbums } = this.state;
-    if (score > topScore) {
+  getGameResults = () => {
+    const { highScore, currScore } = this.state;
+    if (currScore > highScore) {
       this.setState({
-        highScore: score
+        highScore: currScore
       });
-      localStorage.setItem("High Score", highScore);
-      console.log(clickedAlbums);
+      localStorage.setItem("highScore", currScore);
     }
-
-    this.setState({ guessedWrong: true, clickedAlbums: [], currScore: 0 });
   };
 
   render() {
@@ -76,7 +76,7 @@ class App extends Component {
       <div className='App'>
         <Header
           currScore={this.state.currScore}
-          highScore={localStorage.getItem("High Score")}
+          highScore={this.state.highScore}
           guessedRight={this.state.guessedRight}
           guessedWrong={this.state.guessedWrong}
         />
